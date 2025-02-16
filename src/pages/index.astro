@@ -24,22 +24,29 @@ const qrCodeDataUrl = await QRCode.toDataURL(data.url); // Generate QR code
         background: linear-gradient(135deg, #1e1e2e, #3a3a52);
         font-family: Arial, sans-serif;
         color: white;
+        padding: 20px;
       }
       .container {
         display: flex;
+        flex-wrap: wrap;
         gap: 20px;
+        justify-content: center;
+        align-items: center;
+        max-width: 800px;
       }
       .card {
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
         border-radius: 16px;
         padding: 20px;
-        width: 500px;
+        width: 100%;
+        max-width: 300px;
         text-align: center;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       }
       .qr-card img {
         width: 100%;
+        max-width: 200px;
         background: white;
         padding: 10px;
         border-radius: 8px;
@@ -48,6 +55,7 @@ const qrCodeDataUrl = await QRCode.toDataURL(data.url); // Generate QR code
         display: flex;
         flex-direction: column;
         justify-content: center;
+        text-align: center;
       }
       h1 {
         font-size: 20px;
@@ -56,6 +64,20 @@ const qrCodeDataUrl = await QRCode.toDataURL(data.url); // Generate QR code
       p {
         font-size: 16px;
         opacity: 0.8;
+      }
+
+      /* Responsive Design */
+      @media (min-width: 600px) {
+        .container {
+          flex-wrap: nowrap;
+        }
+        .card {
+          width: 45%;
+          max-width: 300px;
+        }
+        .text-card {
+          text-align: left;
+        }
       }
     </style>
   </head>
@@ -68,6 +90,7 @@ const qrCodeDataUrl = await QRCode.toDataURL(data.url); // Generate QR code
 
       <!-- Text Card -->
       <div class="card text-card">
+        <h1>{data.title}</h1>
         <p>{data.description}</p>
       </div>
     </div>
