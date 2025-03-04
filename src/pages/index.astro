@@ -1,99 +1,145 @@
 ---
 import QRCode from "qrcode";
-import data from "../data/qr.json"; // Load JSON data
+import data from "../data/qr.json";
 
-const qrCodeDataUrl = await QRCode.toDataURL(data.url); // Generate QR code
+// Generate QR codes during build time
+const apkQRCodeDataUrl = await QRCode.toDataURL(data.apkUrl);
+const testFlightQRCodeDataUrl = await QRCode.toDataURL(data.testFlightUrl);
 ---
 
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{data.title}</title>
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{data.title}</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #1e1e2e, #3a3a52);
+      font-family: Arial, sans-serif;
+      color: white;
+      padding: 20px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      max-width: 800px;
+    }
+    .cards-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    .qr-card img {
+      width: 100%;
+      max-width: 200px;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    h1 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 18px;
+      margin-top: 10px;
+    }
+    p,
+    a {
+      font-size: 16px;
+      opacity: 0.8;
+      color: white;
+      text-decoration: none;
+    }
+
+    /* Desktop view: show QR codes, hide text links */
+    .qr-codes {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .qr-links {
+      display: none;
+    }
+
+    /* Mobile view: hide QR codes, show text links */
+    @media (max-width: 600px) {
+      .qr-codes {
+        display: none;
       }
-      body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background: linear-gradient(135deg, #1e1e2e, #3a3a52);
-        font-family: Arial, sans-serif;
-        color: white;
-        padding: 20px;
-      }
-      .container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
-        align-items: center;
-        max-width: 800px;
-      }
-      .card {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 16px;
-        padding: 20px;
-        width: 100%;
-        max-width: 300px;
-        text-align: center;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      }
-      .qr-card img {
-        width: 100%;
-        max-width: 200px;
-        background: white;
-        padding: 10px;
-        border-radius: 8px;
-      }
-      .text-card {
+      .qr-links {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        text-align: center;
+        gap: 20px;
+        width: 100%;
       }
-      h1 {
-        font-size: 20px;
-        margin-bottom: 10px;
-      }
-      p {
-        font-size: 16px;
-        opacity: 0.8;
-      }
-
-      /* Responsive Design */
-      @media (min-width: 600px) {
-        .container {
-          flex-wrap: nowrap;
-        }
-        .card {
-          width: 45%;
-          max-width: 300px;
-        }
-        .text-card {
-          text-align: left;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <!-- QR Code Card -->
-      <div class="card qr-card">
-        <img src={qrCodeDataUrl} alt="QR Code" />
-      </div>
-
-      <!-- Text Card -->
-      <div class="card text-card">
-        <h1>{data.title}</h1>
-        <p>{data.description}</p>
-      </div>
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- QR Codes for Desktop -->
+  <div class="cards-row qr-codes">
+    <!-- APK QR Code Card -->
+    <div class="card qr-card">
+      <a href={data.apkUrl} target="_blank">
+        <img src={apkQRCodeDataUrl} alt="APK QR Code" />
+      </a>
+      <h2>APK</h2>
     </div>
-  </body>
-</html>
+    <!-- TestFlight QR Code Card -->
+    <div class="card qr-card">
+      <a href={data.testFlightUrl} target="_blank">
+        <img src={testFlightQRCodeDataUrl} alt="TestFlight QR Code" />
+      </a>
+      <h2>TestFlight</h2>
+    </div>
+  </div>
 
+  <!-- Text Links for Mobile -->
+  <div class="cards-row qr-links">
+    <div class="card">
+      <h2>Download APK</h2>
+      <a href={data.apkUrl} target="_blank">{data.apkUrl}</a>
+    </div>
+    <div class="card">
+      <h2>Download TestFlight</h2>
+      <a href={data.testFlightUrl} target="_blank">{data.testFlightUrl}</a>
+    </div>
+  </div>
+
+  <!-- General Information Card -->
+  <div class="card">
+    <h1>{data.title}</h1>
+    <p>{data.description}</p>
+  </div>
+</div>
+</body>
+</html>

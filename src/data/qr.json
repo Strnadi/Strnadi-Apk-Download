@@ -1,6 +1,8 @@
 {
   "url": "https://example.com",
   "title": "Scan this QR Code",
-  "description": "This QR code will take you to Example.com, where you can find awesome content!"
+  "description": "This QR code will take you to Example.com, where you can find awesome content!",
+  "apkUrl" : "https://github.com/Strnadi/Strnadi-Mobile-App/releases/tag/alpha-1.0.1%2B7",
+  "testFlightUrl" : "https://testflight.apple.com/join/gN6SV5Dm"
 }
 
